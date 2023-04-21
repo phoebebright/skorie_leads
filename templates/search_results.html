@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Search Results</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Website</th>
+        <th>Contact Name</th>
+        <th>Contact Email</th>
+        <th>Contact Phone</th>
+        <th>Add Lead</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for result in search_results %}
+        <tr>
+          <td>{{ result.name }}</td>
+          <td>{{ result.website }}</td>
+          <td>{{ result.contact_name }}</td>
+          <td>{{ result.contact_email }}</td>
+          <td>{{ result.contact_phone }}</td>
+          <td>
+            <form method="post" action="{% url 'create_lead' %}">
+              {% csrf_token %}
+              <input type="hidden" name="name" value="{{ result.name }}">
+              <input type="hidden" name="website" value="{{ result.website }}">
+              <input type="hidden" name="contact_name" value="{{ result.contact_name }}">
+              <input type="hidden" name="contact_email" value="{{ result.contact_email }}">
+              <input type="hidden" name="contact_phone" value="{{ result.contact_phone }}">
+              <button type="submit">Add Lead</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

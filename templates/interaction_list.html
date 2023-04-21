@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Interaction List</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Lead Name</th>
+        <th>Interaction Type</th>
+        <th>Description</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for interaction in object_list %}
+        <tr>
+          <td>{{ interaction.lead.name }}</td>
+          <td>{{ interaction.get_interaction_type_display }}</td>
+          <td>{{ interaction.description }}</td>
+          <td>{{ interaction.date }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

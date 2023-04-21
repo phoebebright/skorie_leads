@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+
+{% block content %}
+    <div class="container">
+        <h2>{% if form.instance.pk %}Edit{% else %}Create{% endif %} Interaction</h2>
+
+
+            <div class="container">
+
+                {% if lead %}
+      <div class="mb-3">
+
+      <p>{{ lead.name }}</p>
+      <p>{{ lead.contact_name }}</p>
+      <p>{{ lead.contact_email }} - <a href="mailto:{{lead.contact_email }}">eMail</a></p>
+      <p>{{ lead.facebook_page }}</p>
+      <p>{{ lead.website }}</p>
+      <p>{{ lead.country }}</p>
+      </div>
+            {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.auto_id }}" class="form-label">{{ field.label }}</label>
+                            {{ field|add_class:"form-control" }}
+                            {% if field.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ field.errors|first }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+
+
+
+    </div>
+{% endblock %}
+
+{% block js %}
+  <script>
+
+  $(document).on("change", "#id_templates", function() {
+      // get contents for interaction template and put in id_notes input field
+        var interactiontemplate_id = $(this).val();
+        $.ajax({
+            url: "/api/interaction_template/"+interactiontemplate_id+"/",
+            data: {
+                'interactiontemplate_id': interactiontemplate_id
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('#id_notes').html($('#id_notes').html() + "\n" + data['template_contents']);
+            }
+        });
+  });
+    </script>
+{% endblock %}
